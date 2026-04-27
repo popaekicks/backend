@@ -2,6 +2,7 @@ services:
   # Backend Web Service
   - type: web
     name: task-manager-backend
+    plan: free # Explicitly set to free
     env: node
     rootDir: backend
     buildCommand: npm install
