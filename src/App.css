@@ -1,0 +1,46 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+}
+
+body {
+  background-color: #fff9fb; /* Very light pink background */
+  color: #2c3e50;
+}
+
+.app-container {
+  display: flex;
+  min-height: 100vh;
+}
+
+.main-content {
+  flex-grow: 1;
+  padding: 2rem;
+  transition: padding-left 0.3s;
+}
+
+.main-content.with-sidebar {
+  padding-left: calc(240px + 2rem);
+}
+
+button {
+  cursor: pointer;
+  border-radius: 8px;
+  font-weight: 600;
+  transition: all 0.2s;
+}
+
+input {
+  padding: 0.8rem 1rem;
+  border: 1px solid #f8bbd0;
+  border-radius: 8px;
+  font-size: 1rem;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+input:focus {
+  border-color: #ad1457;
+}
