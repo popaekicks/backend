@@ -25,8 +25,8 @@ services:
     routes:
       # Rewrite /api requests to the backend service
       - type: rewrite
-        src: /api/*
-        dest: https://task-manager-backend.onrender.com/api/*
+        source: /api/*
+        destination: https://task-manager-backend.onrender.com/api/*
 
 databases:
   - name: task-manager-db
