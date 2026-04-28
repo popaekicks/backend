@@ -25,6 +25,12 @@ body {
   padding-left: calc(240px + 2rem);
 }
 
+@media (max-width: 768px) {
+  .main-content.with-sidebar {
+    padding: 80px 1.5rem 90px 1.5rem; /* Space for top and bottom nav */
+  }
+}
+
 button {
   cursor: pointer;
   border-radius: 8px;

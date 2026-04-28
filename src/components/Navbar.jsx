@@ -8,8 +8,13 @@ function Navbar({ logout }) {
   return (
     <nav className="navbar">
       <div className="nav-header">
-        <h2 className="brand">Tasky</h2>
-        {username && <p className="user-info">Hi, {username}!</p>}
+        <div className="brand-container">
+          <h2 className="brand">Tasky</h2>
+          {username && <p className="user-info">Hi, {username}!</p>}
+        </div>
+        <button onClick={logout} className="logout-btn mobile-logout">
+          <LogOut size={20} />
+        </button>
       </div>
       {/* Links to different pages in our app */}
       <ul className="nav-links">
@@ -32,7 +37,7 @@ function Navbar({ logout }) {
           </Link>
         </li>
       </ul>
-      <button onClick={logout} className="logout-btn">
+      <button onClick={logout} className="logout-btn desktop-logout">
         <LogOut size={20} />
         <span>Logout</span>
       </button>
