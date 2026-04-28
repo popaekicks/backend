@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { PlusCircle } from 'lucide-react'
+import { taskService } from '../services/api'
 import './AddTask.css'
 
 function AddTask({ tasks, setTasks, token }) {
@@ -15,24 +16,15 @@ function AddTask({ tasks, setTasks, token }) {
       return
     }
 
-    // Send the new task to our backend API
-    const res = await fetch('/api/tasks', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': token
-      },
-      body: JSON.stringify({ title })
-    })
-
-    const data = await res.json()
-
-    if (res.ok) {
+    try {
+      // Send the new task to our backend API
+      const data = await taskService.create(token, title)
+      
       // If the server says OK, add it to our list and go back
       setTasks([...tasks, data])
       navigate('/list')
-    } else {
-      setError(data.message)
+    } catch (err) {
+      setError(err.message)
     }
   }
 

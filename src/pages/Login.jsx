@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { User, Lock, LogIn } from 'lucide-react'
+import { authService } from '../services/api'
 import './login.css'
 
 function Login({ setToken, onLogin }) {
@@ -22,24 +23,10 @@ function Login({ setToken, onLogin }) {
       return
     }
 
-    // Decide which API endpoint to hit
-    const url = isRegister
-      ? '/api/auth/register'
-      : '/api/auth/login'
-
     try {
-      const res = await fetch(url, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username, password })
-      })
-
-      const data = await res.json()
-
-      if (!res.ok) {
-        setError(data.message)
-        return
-      }
+      const data = isRegister 
+        ? await authService.register(username, password)
+        : await authService.login(username, password)
 
       // If login is successful, save the token and go to the home page
       if (!isRegister) {
@@ -54,7 +41,7 @@ function Login({ setToken, onLogin }) {
         setIsRegister(false)
       }
     } catch (err) {
-      setError('Could not connect to server')
+      setError(err.message || 'Could not connect to server')
     }
   }
 

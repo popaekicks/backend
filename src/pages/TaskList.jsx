@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { CheckCircle, Circle, Trash2, Edit2, Save, X } from 'lucide-react'
+import { taskService } from '../services/api'
 
 function TaskList({ tasks, setTasks, token }) {
   const [editingId, setEditingId] = useState(null)
@@ -8,47 +9,38 @@ function TaskList({ tasks, setTasks, token }) {
   // Toggle if a task is finished or not
   async function toggleComplete(id, completed) {
     const newStatus = !completed
-    await fetch(`/api/tasks/${id}`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': token
-      },
-      body: JSON.stringify({ completed: newStatus })
-    })
-    // Update the local state so the UI changes immediately
-    setTasks(tasks.map(task =>
-      task.id === id ? { ...task, completed: newStatus } : task
-    ))
+    try {
+      await taskService.update(token, id, { completed: newStatus })
+      // Update the local state so the UI changes immediately
+      setTasks(tasks.map(task =>
+        task.id === id ? { ...task, completed: newStatus } : task
+      ))
+    } catch (err) {
+      console.error('Update error:', err)
+    }
   }
 
   // Send a delete request to the server
   async function deleteTask(id) {
     if (!window.confirm('Delete this task?')) return
-    await fetch(`/api/tasks/${id}`, {
-      method: 'DELETE',
-      headers: { 'Authorization': token }
-    })
-    setTasks(tasks.filter(task => task.id !== id))
+    try {
+      await taskService.delete(token, id)
+      setTasks(tasks.filter(task => task.id !== id))
+    } catch (err) {
+      console.error('Delete error:', err)
+    }
   }
 
   async function saveEdit(id) {
-    // Note: The backend PUT route only handles 'completed'. 
-    // I should probably update the backend to handle 'title' as well.
-    // But to keep it minimal as requested, I'll focus on UI first.
-    // Let's assume the backend will handle title too.
-    await fetch(`/api/tasks/${id}`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': token
-      },
-      body: JSON.stringify({ title: editTitle })
-    })
-    setTasks(tasks.map(task =>
-      task.id === id ? { ...task, title: editTitle } : task
-    ))
-    setEditingId(null)
+    try {
+      await taskService.update(token, id, { title: editTitle })
+      setTasks(tasks.map(task =>
+        task.id === id ? { ...task, title: editTitle } : task
+      ))
+      setEditingId(null)
+    } catch (err) {
+      console.error('Edit error:', err)
+    }
   }
 
   function startEdit(task) {
@@ -78,7 +70,6 @@ function TaskList({ tasks, setTasks, token }) {
             justifyContent: 'space-between',
             alignItems: 'center',
             boxShadow: '0 4px 12px rgba(0,0,0,0.03)',
-            borderLeft: `6px solid ${task.completed ? '#f8bbd0' : '#ad1457'}`,
             opacity: task.completed ? 0.7 : 1,
             transition: 'all 0.3s'
           }}>

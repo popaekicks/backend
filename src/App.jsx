@@ -5,6 +5,7 @@ import Home from './pages/Home'
 import TaskList from './pages/TaskList'
 import AddTask from './pages/AddTask'
 import Login from './pages/Login'
+import { taskService } from './services/api'
 import './App.css'
 
 function App() {
@@ -15,18 +16,14 @@ function App() {
   // Every time the token changes, we fetch the latest tasks from the server
   useEffect(() => {
     if (token) {
-      fetch('/api/tasks', {
-        headers: { 'Authorization': token }
-      })
-        .then(res => {
-          if (res.status === 401) {
-            logout()
-            throw new Error('Unauthorized')
-          }
-          return res.json()
-        })
+      taskService.getAll(token)
         .then(data => setTasks(data))
-        .catch(err => console.error('Fetch error:', err))
+        .catch(err => {
+          console.error('Fetch error:', err)
+          if (err.message === 'Unauthorized' || err.message === 'jwt expired') {
+            logout()
+          }
+        })
     }
   }, [token])
 
