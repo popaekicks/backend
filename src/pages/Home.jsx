@@ -1,5 +1,6 @@
 import { CheckCircle, Clock, List } from 'lucide-react'
 import { Link } from 'react-router-dom'
+import StatCard from '../components/StatCard'
 import './Home.css'
 
 function Home({ tasks }) {
@@ -15,23 +16,24 @@ function Home({ tasks }) {
 
       {/* Grid showing the quick stats */}
       <div className="stats-grid">
-        <div className="stat-card">
-          <List size={40} color="#ad1457" className="stat-icon" />
-          <h3 className="stat-title">Total Tasks</h3>
-          <p className="stat-count total">{tasks.length}</p>
-        </div>
-
-        <div className="stat-card">
-          <CheckCircle size={40} color="#4caf50" className="stat-icon" />
-          <h3 className="stat-title">Completed</h3>
-          <p className="stat-count completed">{completedCount}</p>
-        </div>
-
-        <div className="stat-card">
-          <Clock size={40} color="#ff9800" className="stat-icon" />
-          <h3 className="stat-title">Pending</h3>
-          <p className="stat-count pending">{pendingCount}</p>
-        </div>
+        <StatCard 
+          icon={List} 
+          title="Total Tasks" 
+          count={tasks.length} 
+          colorClass="total" 
+        />
+        <StatCard 
+          icon={CheckCircle} 
+          title="Completed" 
+          count={completedCount} 
+          colorClass="completed" 
+        />
+        <StatCard 
+          icon={Clock} 
+          title="Pending" 
+          count={pendingCount} 
+          colorClass="pending" 
+        />
       </div>
 
       <div className="home-actions">
